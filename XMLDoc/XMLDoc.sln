@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XMLDoc", "XMLDoc\XMLDoc.csproj", "{CEA55508-6EA0-43CC-8380-C8D2F993D438}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CEA55508-6EA0-43CC-8380-C8D2F993D438}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEA55508-6EA0-43CC-8380-C8D2F993D438}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEA55508-6EA0-43CC-8380-C8D2F993D438}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEA55508-6EA0-43CC-8380-C8D2F993D438}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
