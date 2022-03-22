@@ -10,6 +10,7 @@ namespace XMLDoc
     {
         Dictionary<string, int> wordsDictionary = new Dictionary<string, int>();
         List<string> topics = new List<string>();
+        private Dictionary<int, int> apparationDictionary = new Dictionary<int, int>();
 
         public Article(string path, List<string> stopWords, List<string> allWords)
         {
@@ -19,21 +20,21 @@ namespace XMLDoc
             GetXmlTopics(document, topics);
         }
         
-        public static void GetXmlTitle(XDocument document, Dictionary<string, int> wordsDictionary, 
+        private static void GetXmlTitle(XDocument document, Dictionary<string, int> wordsDictionary, 
             List<string> allWords, List<string> stopWords)
         {
             var title = document.Descendants("title").FirstOrDefault();
             ParseText((string) title, wordsDictionary, allWords, stopWords);
         }
 
-        public static void GetXmlText(XDocument document, Dictionary<string, int> wordsDictionary, 
+        private static void GetXmlText(XDocument document, Dictionary<string, int> wordsDictionary, 
             List<string> allWords, List<string> stopWords)
         {
             var text = document.Descendants("text").FirstOrDefault();
             ParseText((string)text, wordsDictionary, allWords, stopWords);
         }
 
-        public static void GetXmlTopics(XDocument document, List<string> topics)
+        private static void GetXmlTopics(XDocument document, List<string> topics)
         {
             var topicsCodes = document.Descendants("codes").FirstOrDefault()?.NextNode.NextNode;
             var codes = (topicsCodes as XElement)?.DescendantNodes();
@@ -46,7 +47,7 @@ namespace XMLDoc
                 }
             }
         }
-        public static void ParseText(string text, Dictionary<string, int> wordsDictionary, 
+        private static void ParseText(string text, Dictionary<string, int> wordsDictionary, 
             List<string> allWords, List<string> stopWords)
         {
             MatchCollection matches = Regex.Matches(text.ToLower(), @"\w+|\b(\w\.){2,}|\w+'(\w+){2,}");
@@ -69,10 +70,26 @@ namespace XMLDoc
             }
 
             var orders = wordsDictionary
-                .OrderByDescending(x => x.Value)
+                .OrderByDescending(x => x.Key)
                 .ToDictionary(x => x.Key, x => x.Value);
 
             /*foreach (KeyValuePair<string, int> kvp in orders)
+            {
+                Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+            }*/
+        }
+        
+        public void MakeApparitionDictionary(List<string> allWords)
+        {
+            foreach (var word in allWords)
+            {
+                if (wordsDictionary.ContainsKey(word))
+                {
+                    apparationDictionary.Add(allWords.IndexOf(word), wordsDictionary[word]);
+                }
+            }
+            
+            /*foreach (KeyValuePair<int, int> kvp in apparationDictionary)
             {
                 Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
             }*/

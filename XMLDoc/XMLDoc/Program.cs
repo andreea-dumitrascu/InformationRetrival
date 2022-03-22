@@ -17,11 +17,7 @@ namespace XMLDoc
             InitializeStopWords();
             ReadAllArticles();
             allWords.Sort();
-
-            foreach (var word in allWords)
-            {
-                Console.WriteLine(word);
-            }
+            MakeRareMatrix();
         }
 
         private static void InitializeStopWords()
@@ -46,6 +42,14 @@ namespace XMLDoc
                 }
             }
             else Console.WriteLine("The folder path does not exists!");
+        }
+
+        public static void MakeRareMatrix()
+        {
+            foreach (var article in articles)
+            {
+                article.MakeApparitionDictionary(allWords);
+            }
         }
         
         void GetAbbr(string text)
