@@ -19,8 +19,6 @@ namespace XMLDoc
             allWords.Sort();
             MakeDictionaryIndexesFile();
             MakeRareMatrix();
-
-            
         }
 
         private static void InitializeStopWords()
@@ -51,6 +49,7 @@ namespace XMLDoc
         {
             foreach (var article in articles)
             {
+                Console.WriteLine("D" + articles.IndexOf(article) + ": ");
                 article.MakeApparitionDictionary(allWords);
                 Console.WriteLine("------------------------------");
             }
@@ -63,7 +62,6 @@ namespace XMLDoc
                 foreach (string word in allWords)
                 {
                     outputFile.WriteLine(word + " " + allWords.IndexOf(word));
-                    
                 }
             }
         }

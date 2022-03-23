@@ -91,7 +91,7 @@ namespace XMLDoc
             
             foreach (KeyValuePair<int, int> kvp in apparationDictionary)
             {
-                Console.WriteLine("Key = {0}: Value = {1}", kvp.Key, kvp.Value);
+                Console.WriteLine("{0}:{1} ", kvp.Key, kvp.Value);
             }
         }
 
