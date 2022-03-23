@@ -17,7 +17,10 @@ namespace XMLDoc
             InitializeStopWords();
             ReadAllArticles();
             allWords.Sort();
+            MakeDictionaryIndexesFile();
             MakeRareMatrix();
+
+            
         }
 
         private static void InitializeStopWords()
@@ -49,8 +52,23 @@ namespace XMLDoc
             foreach (var article in articles)
             {
                 article.MakeApparitionDictionary(allWords);
+                Console.WriteLine("------------------------------");
             }
         }
+
+        public static void MakeDictionaryIndexesFile()
+        {
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(Directory.GetCurrentDirectory(), "dictionary_indexs.txt")))
+            {
+                foreach (string word in allWords)
+                {
+                    outputFile.WriteLine(word + " " + allWords.IndexOf(word));
+                    
+                }
+            }
+        }
+        
+        
         
         void GetAbbr(string text)
         {
