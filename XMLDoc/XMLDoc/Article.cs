@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -9,8 +8,8 @@ namespace XMLDoc
     public class Article
     {
         Dictionary<string, int> wordsDictionary = new Dictionary<string, int>();
-        List<string> topics = new List<string>();
-        private Dictionary<int, int> apparationDictionary = new Dictionary<int, int>();
+        public List<string> topics = new List<string>();
+        public Dictionary<int, int> apparationDictionary = new Dictionary<int, int>();
 
         public Article(string path, List<string> stopWords, List<string> allWords)
         {
@@ -50,10 +49,13 @@ namespace XMLDoc
         private static void ParseText(string text, Dictionary<string, int> wordsDictionary, 
             List<string> allWords, List<string> stopWords)
         {
+            
             MatchCollection matches = Regex.Matches(text.ToLower(), @"\w+|\b(\w\.){2,}|\w+'(\w+){2,}");
             foreach (Match match in matches)
             {
                 string word = match.Value;
+                PorterStemmer m_porterStemmer = new PorterStemmer();
+                word = m_porterStemmer.stemTerm(word);
                 if (word.Any(char.IsDigit) || word.All(char.IsDigit) || stopWords.Contains(word)) continue;
                 if (wordsDictionary.ContainsKey(word))
                 {
@@ -87,11 +89,6 @@ namespace XMLDoc
                 {
                     apparationDictionary.Add(allWords.IndexOf(word), wordsDictionary[word]);
                 }
-            }
-            
-            foreach (KeyValuePair<int, int> kvp in apparationDictionary)
-            {
-                Console.WriteLine("{0}:{1} ", kvp.Key, kvp.Value);
             }
         }
 

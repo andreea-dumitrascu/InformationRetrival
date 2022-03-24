@@ -11,14 +11,15 @@ namespace XMLDoc
         static List<string> allWords = new List<string>();
         static List<Article> articles = new List<Article>();
         static List<string> stopWords = new List<string>();
+        private static StreamWriter outputFile = new StreamWriter(Path.Combine(Directory.GetCurrentDirectory(), "output.txt"));
 
         public static void Main(string[] args)
         {
             InitializeStopWords();
             ReadAllArticles();
             allWords.Sort();
-            MakeDictionaryIndexesFile();
             MakeRareMatrix();
+            MakeOutputFile();
         }
 
         private static void InitializeStopWords()
@@ -49,25 +50,37 @@ namespace XMLDoc
         {
             foreach (var article in articles)
             {
-                Console.WriteLine("D" + articles.IndexOf(article) + ": ");
                 article.MakeApparitionDictionary(allWords);
-                Console.WriteLine("------------------------------");
             }
         }
 
-        public static void MakeDictionaryIndexesFile()
+        public static void MakeOutputFile()
         {
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(Directory.GetCurrentDirectory(), "dictionary_indexs.txt")))
+            using (outputFile)
             {
-                foreach (string word in allWords)
+                foreach (var word in allWords)
                 {
-                    outputFile.WriteLine(word + " " + allWords.IndexOf(word));
+                    outputFile.WriteLine("@ATTRIBUTE " + word);
+                }
+                outputFile.WriteLine();
+                outputFile.WriteLine("@DATA");
+                foreach (var article in articles)
+                {
+                    foreach (KeyValuePair<int, int> kvp in article.apparationDictionary)
+                    {
+                        outputFile.Write("{0}:{1} ", kvp.Key, kvp.Value);
+                    }
+                    outputFile.Write("# ");
+                    foreach (var topic in article.topics)
+                    {
+                        outputFile.Write(topic + " ");
+                    }
+                    outputFile.WriteLine();
+                    outputFile.WriteLine();
                 }
             }
         }
-        
-        
-        
+
         void GetAbbr(string text)
         {
             string pattern =
