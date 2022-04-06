@@ -66,6 +66,7 @@ namespace XMLDoc
                 outputFile.WriteLine("@DATA");
                 foreach (var article in articles)
                 {
+                    article.NormalizeDictionary();
                     foreach (KeyValuePair<int, int> kvp in article.apparationDictionary)
                     {
                         outputFile.Write("{0}:{1} ", kvp.Key, kvp.Value);
@@ -103,5 +104,5 @@ namespace XMLDoc
                 }
             }
         }
-}
+    }
 }

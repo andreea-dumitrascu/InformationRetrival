@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -10,6 +11,7 @@ namespace XMLDoc
         Dictionary<string, int> wordsDictionary = new Dictionary<string, int>();
         public List<string> topics = new List<string>();
         public Dictionary<int, int> apparationDictionary = new Dictionary<int, int>();
+        public Dictionary<int, double> normalizedDictionary = new Dictionary<int, double>();
 
         public Article(string path, List<string> stopWords, List<string> allWords)
         {
@@ -54,8 +56,8 @@ namespace XMLDoc
             foreach (Match match in matches)
             {
                 string word = match.Value;
-                PorterStemmer m_porterStemmer = new PorterStemmer();
-                word = m_porterStemmer.stemTerm(word);
+                PorterStemmer porterStemmer = new PorterStemmer();
+                word = porterStemmer.stemTerm(word);
                 if (word.Any(char.IsDigit) || word.All(char.IsDigit) || stopWords.Contains(word)) continue;
                 if (wordsDictionary.ContainsKey(word))
                 {
@@ -89,6 +91,24 @@ namespace XMLDoc
                 {
                     apparationDictionary.Add(allWords.IndexOf(word), wordsDictionary[word]);
                 }
+            }
+        }
+
+        //nominal normalization
+        public void NormalizeDictionary()
+        {
+            var max = apparationDictionary.Values.Max();
+           
+            foreach (var value in apparationDictionary)
+            {
+                double normalValue;
+                normalValue = (1.0 * value.Value) / max;
+                normalizedDictionary.Add(value.Key, normalValue);
+            }
+            
+            foreach (KeyValuePair<int, double> kvp in normalizedDictionary)
+            {
+                Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
             }
         }
 
