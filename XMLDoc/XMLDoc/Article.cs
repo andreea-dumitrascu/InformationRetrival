@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -8,13 +8,15 @@ namespace XMLDoc
 {
     public class Article
     {
-        Dictionary<string, int> wordsDictionary = new Dictionary<string, int>();
+        public string name;
+        public Dictionary<string, int> wordsDictionary = new Dictionary<string, int>();
         public List<string> topics = new List<string>();
         public Dictionary<int, int> apparationDictionary = new Dictionary<int, int>();
         public Dictionary<int, double> normalizedDictionary = new Dictionary<int, double>();
 
         public Article(string path, List<string> stopWords, List<string> allWords)
         {
+            name = Path.GetFileName(path);
             XDocument document = XDocument.Load(path);
             GetXmlTitle(document, wordsDictionary, allWords, stopWords);
             GetXmlText(document, wordsDictionary, allWords, stopWords);
@@ -104,11 +106,6 @@ namespace XMLDoc
                 double normalValue;
                 normalValue = (1.0 * value.Value) / max;
                 normalizedDictionary.Add(value.Key, normalValue);
-            }
-            
-            foreach (KeyValuePair<int, double> kvp in normalizedDictionary)
-            {
-                Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
             }
         }
 

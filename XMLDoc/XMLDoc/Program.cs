@@ -67,6 +67,7 @@ namespace XMLDoc
                 foreach (var article in articles)
                 {
                     article.NormalizeDictionary();
+                    outputFile.WriteLine(article.name);
                     foreach (KeyValuePair<int, int> kvp in article.apparationDictionary)
                     {
                         outputFile.Write("{0}:{1} ", kvp.Key, kvp.Value);
