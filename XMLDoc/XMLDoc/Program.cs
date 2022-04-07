@@ -12,8 +12,15 @@ namespace XMLDoc
         static List<Article> articles = new List<Article>();
         static List<string> stopWords = new List<string>();
         private static StreamWriter outputFile = new StreamWriter(Path.Combine(Directory.GetCurrentDirectory(), "output.txt"));
-
+        private string inputPath;
+        
         public static void Main(string[] args)
+        {
+            ArticlePreparation();
+            InputPreparation();
+        }
+        
+        private static void ArticlePreparation()
         {
             InitializeStopWords();
             ReadAllArticles();
@@ -22,6 +29,14 @@ namespace XMLDoc
             MakeOutputFile();
         }
 
+        private static void InputPreparation()
+        {
+            string text = File.ReadAllText(@"/Users/bestiuta/Desktop/Interogari de test pentru setul cu 7083 documente.txt");
+            Sequence input = new Sequence(text, stopWords, allWords);
+            input.MakeApparitionDictionary(allWords);
+            input.NormalizeDictionary();
+        }
+        
         private static void InitializeStopWords()
         {
             string stopWordsPath = Directory.GetCurrentDirectory() + "//stopwords.txt";
