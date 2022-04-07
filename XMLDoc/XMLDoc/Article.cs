@@ -14,6 +14,9 @@ namespace XMLDoc
         public Dictionary<int, int> apparationDictionary = new Dictionary<int, int>();
         public Dictionary<int, double> normalizedDictionary = new Dictionary<int, double>();
 
+        protected Article()
+        { }
+        
         public Article(string path, List<string> stopWords, List<string> allWords)
         {
             name = Path.GetFileName(path);
@@ -22,7 +25,7 @@ namespace XMLDoc
             GetXmlText(document, wordsDictionary, allWords, stopWords);
             GetXmlTopics(document, topics);
         }
-        
+
         private static void GetXmlTitle(XDocument document, Dictionary<string, int> wordsDictionary, 
             List<string> allWords, List<string> stopWords)
         {
@@ -50,7 +53,8 @@ namespace XMLDoc
                 }
             }
         }
-        private static void ParseText(string text, Dictionary<string, int> wordsDictionary, 
+
+        protected static void ParseText(string text, Dictionary<string, int> wordsDictionary, 
             List<string> allWords, List<string> stopWords)
         {
             
