@@ -13,14 +13,17 @@ namespace XMLDoc
         static List<string> stopWords = new List<string>();
         private static StreamWriter outputFile = new StreamWriter(Path.Combine(Directory.GetCurrentDirectory(), "output.txt"));
         private string inputPath;
+        private static Sequence input;
+        private List<string> articaleOrdersName = new List<string>();
         
         public static void Main(string[] args)
         {
-            ArticlePreparation();
+            ArticlesPreparation();
             InputPreparation();
+            GetSimilarity();
         }
         
-        private static void ArticlePreparation()
+        private static void ArticlesPreparation()
         {
             InitializeStopWords();
             ReadAllArticles();
@@ -32,7 +35,7 @@ namespace XMLDoc
         private static void InputPreparation()
         {
             string text = File.ReadAllText(@"/Users/bestiuta/Desktop/Interogari de test pentru setul cu 7083 documente.txt");
-            Sequence input = new Sequence(text, stopWords, allWords);
+            input = new Sequence(text, stopWords, allWords);
             input.MakeApparitionDictionary(allWords);
             input.NormalizeDictionary();
         }
@@ -95,6 +98,31 @@ namespace XMLDoc
                     outputFile.WriteLine();
                     outputFile.WriteLine();
                 }
+            }
+        }
+
+        public static void GetSimilarity()
+        {
+            foreach (var article in articles)
+            {
+                var similarity = 0.0;
+                for (int i = 0; i < allWords.Count; i++)
+                {
+                    var articleNormalized = article.normalizedDictionary;
+                    var sequenceNormalized = input.normalizedDictionary;
+                    var articleItem = 0.0;
+                    var sequenceItem = 0.0;
+                    
+                    if (articleNormalized.ContainsKey(i))
+                        articleItem = articleNormalized[i];
+                    
+                    if(sequenceNormalized.ContainsKey(i))
+                        sequenceItem = sequenceNormalized[i];
+                    
+                    var pow = Math.Pow(articleItem - sequenceItem, 2);
+                    similarity = Math.Sqrt(similarity + pow);
+                }
+                Console.WriteLine(similarity);
             }
         }
 
