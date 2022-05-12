@@ -14,8 +14,7 @@ namespace XMLDoc
         private static StreamWriter outputFile = new StreamWriter(Path.Combine(Directory.GetCurrentDirectory(), "output.txt"));
         private string inputPath;
         private static Sequence input;
-        private static List<Tuple<double, string>> list = new List<Tuple<double, string>>();
-        private List<string> articaleOrdersName = new List<string>();
+        private static List<Tuple<double, string>> resultList = new List<Tuple<double, string>>();
         
         public static void Main(string[] args)
         {
@@ -119,14 +118,16 @@ namespace XMLDoc
                     
                     if(sequenceNormalized.ContainsKey(i))
                         sequenceItem = sequenceNormalized[i];
-                    
-                    var pow = Math.Pow(articleItem - sequenceItem, 2);
-                    similarity = Math.Sqrt(similarity + pow);
+
+                    var diff = articleItem - sequenceItem;
+                    var pow = Math.Pow(diff, 2);
+                    similarity += pow;
                 }
-                list.Add(new Tuple<double, string>(similarity, article.name));
+                similarity = Math.Sqrt(similarity);
+                resultList.Add(new Tuple<double, string>(similarity, article.name));
             }
-            list.Sort((a, b) => a.Item1.CompareTo(b.Item1));
-            foreach (var element in list) {
+            resultList.Sort((a, b) => a.Item1.CompareTo(b.Item1));
+            foreach (var element in resultList) {
                 Console.WriteLine(element);
             }
         }

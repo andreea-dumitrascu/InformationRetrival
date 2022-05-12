@@ -107,8 +107,7 @@ namespace XMLDoc
            
             foreach (var value in apparationDictionary)
             {
-                double normalValue;
-                normalValue = (1.0 * value.Value) / max;
+                var normalValue = (1.0 * value.Value) / max;
                 normalizedDictionary.Add(value.Key, normalValue);
             }
         }
